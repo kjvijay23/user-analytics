@@ -8,11 +8,11 @@ from google.cloud import bigquery
 import pandas as pd
 
 
-class bq_stub():
-    def result(query):
-        return bq_stub()
+class BqStub():
+    def result(self):
+        return BqStub()
 
-    def to_dataframe(query):
+    def to_dataframe(self):
         return pd.DataFrame([1])
 
 
@@ -32,14 +32,14 @@ class AppTestCase(unittest.TestCase):
             assert '.json was not found' in str(rv.data)
 
     @patch('user_analytics.connectivity.connections.connect_bq')
-    def test_orderStatus(self, bq_mock):
+    def test_order_status(self, bq_mock):
         rv = self.app.get('/orderStatus/')
         response = json.loads(rv.data)
         expected = {'error': 'Bad request - Required fullvisitorid'}
         self.assertDictEqual(response, expected)
 
     @patch('user_analytics.connectivity.connections.connect_bq')
-    def test_orderResponse(self, bq_mock):
+    def test_order_response(self, bq_mock):
         rv = self.app.get('/orderStatus/123')
         expected = 'b\'"No data found for the visitor_id 123"\\n\''
         self.assertEqual(str(rv.data), expected)
@@ -52,7 +52,7 @@ class AppTestCase(unittest.TestCase):
 
     @patch('google.cloud.bigquery.Client', autospec=True)
     def test_dao(self, mock_bigquery):
-        mock_bigquery.query.return_value = bq_stub()
+        mock_bigquery.query.return_value = BqStub()
         rv = dao.get_order_status(mock_bigquery, 123)
         self.assertIsInstance(rv, dict)
 
