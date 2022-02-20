@@ -40,7 +40,3 @@ def get_order_details(fullvisitorid):
 @app.errorhandler(404)
 def error_msg(e):
     return jsonify(error='Bad request - Required fullvisitorid')
-
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
