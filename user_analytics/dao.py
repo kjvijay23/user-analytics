@@ -2,6 +2,13 @@ import logging
 
 
 def get_order_status(bq_client, fullvisitorid):
+    """Get the order status from bigquery based on the visior_id
+
+    :param: bq_client: bigquery client
+    :param: string: fullvisitorid - visitor_id to lookup
+    :returns: dict: result - dictionary contains the response required
+    """
+
     result = "No data found for the visitor_id {}".format(fullvisitorid)
     query_string = """
     SELECT * FROM
@@ -15,9 +22,9 @@ def get_order_status(bq_client, fullvisitorid):
 
     dataframe = bq_client.query(query_string).result().to_dataframe()
 
-    if not dataframe.empty:
+    if not dataframe.empty:  # if visitor is present
         logging.info("Retrieved status from bigquery for visitor {}".format(fullvisitorid))
-        result_set = dataframe.to_dict(orient='records')[0]
+        result_set = dataframe.to_dict(orient='records')[0]  # take only the first record
         order_placed = True if result_set.get("backendOrderId") else False
         order_delivered = True if result_set.get("status_id") == 24 else False
         result = {"full_visitor_id": result_set.get("fullvisitorid"),

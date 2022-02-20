@@ -8,7 +8,7 @@ from google.cloud import bigquery
 import pandas as pd
 
 
-class BqStub():
+class BqStub():  # Stub class for BigQuery Client
     def result(self):
         return BqStub()
 

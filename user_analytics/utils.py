@@ -5,7 +5,10 @@ import uuid
 
 
 def setup_logging():
-    logging.getLogger("boto3").setLevel(logging.WARNING)
+    """
+    Configures custom log format handler
+    """
+    logging.getLogger("werkzeug").setLevel(logging.ERROR)  # supress flask warnings
     logging.basicConfig(format='%(asctime)s : Line-%(lineno)s : %(message)s', level=logging.INFO)
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
@@ -13,11 +16,17 @@ def setup_logging():
 
 
 def notify(message):
+    """
+    Function to notify status through slack/ email
+    """
     logging.error(message)
     return True
 
 
 def get_uuid():
+    """
+    Generated UUID based on the date and time
+    """
     uuid_gen = datetime.now().strftime('%Y%m%d') + "_" + (str(time()).replace(".", "-")) + "_" + uuid.uuid4().hex[:10]
     return str(uuid_gen)
 

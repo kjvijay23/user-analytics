@@ -1,3 +1,8 @@
+"""
+Purpose:    Connectivity class
+Import:     from connectivity import connections
+Use:        connections.method
+"""
 import sys
 import logging
 from google.cloud import bigquery
@@ -5,6 +10,11 @@ from . import params as env
 
 
 class Connectivity():
+    """
+    A class for connecting to external services and databases.
+    utilizes params to read credentials from the environment variables
+    """
+
     def __init__(self):
         super(Connectivity, self).__init__()
         self.env = env
