@@ -1,0 +1,31 @@
+name: Python UnitTests
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Python 3
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: |
+          python -m pip install -q flake8==4.0.1 pep8-naming==0.12.1
+          pip install -qr requirements.txt
+      - name: Run linter and static code analysis
+        run: |
+          flake8 --max-line-length 500 user_analytics
+          flake8 --max-line-length 500 --ignore=F401 tests
+      - name: Run Test Cases
+        run: coverage run --source user_analytics -m unittest discover -s tests
+      - name: Get coverage report
+        run: coverage report
